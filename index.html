@@ -5,47 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SLIIT Xtreme 4.0 - Countdown Timer</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            height: 100vh;
-            width: 100vw;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-            position: fixed;
-            overflow: hidden;
-            top: 0;
-            left: 0;
+            height: 100vh; width: 100vw;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 1rem; position: fixed; overflow: hidden; top: 0; left: 0;
         }
-        
-        html {
-            overflow: hidden;
-            height: 100vh;
-            width: 100vw;
-        }
-
-        /* Animated Background */
+        html { overflow: hidden; height: 100vh; width: 100vw; }
         body::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle at 25% 25%, rgba(226, 125, 56, 0.1) 0%, transparent 50%),
-                        radial-gradient(circle at 75% 75%, rgba(96, 165, 250, 0.1) 0%, transparent 50%);
-            animation: rotateBackground 20s linear infinite;
-            z-index: 0;
+            content: ''; position: absolute; top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle at 25% 25%, rgba(226,125,56,0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 75% 75%, rgba(96,165,250,0.1) 0%, transparent 50%);
+            animation: rotateBackground 20s linear infinite; z-index: 0;
         }
+        @keyframes rotateBackground { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .page-container { position: relative; z-index: 1; max-width: 1200px; width: 100%; height: 100%;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .header { text-align: center; margin-bottom: 1.5rem; }
+        .main-title { font-size: clamp(1.5rem, 4vw, 3rem); font-weight: 900;
+            background: linear-gradient(135deg, #ffffff, #e2e8f0);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem; text-shadow: 0 0 30px rgba(255,255,255,0.5); letter-spacing: 2px; }
+        .subtitle { font-size: clamp(0.875rem, 2vw, 1.25rem); color: #94a3b8; font-weight: 600;
+            text-transform: uppercase; letter-spacing: 3px; }
 
         @keyframes rotateBackground {
             0% { transform: rotate(0deg); }
@@ -595,15 +580,10 @@
             </div>
 
             <div class="enhanced-countdown-grid" id="countdownDisplay">
-                <!-- Days -->
                 <div class="countdown-unit" id="daysUnit">
                     <div class="countdown-card">
-                        <div class="countdown-number-display">
-                            <div class="countdown-number-top" id="days">00</div>
-                        </div>
-                        <div class="countdown-progress">
-                            <div class="countdown-progress-bar" id="daysProgress"></div>
-                        </div>
+                        <div class="countdown-number-display"><div class="countdown-number-top" id="days">00</div></div>
+                        <div class="countdown-progress"><div class="countdown-progress-bar" id="daysProgress"></div></div>
                         <div class="countdown-label">Days</div>
                         <div class="countdown-glow"></div>
                     </div>
@@ -611,66 +591,31 @@
 
                 <div class="countdown-separator" id="daysSeparator">:</div>
 
-                <!-- Hours -->
                 <div class="countdown-unit">
-                    <div class="countdown-card">
-                        <div class="countdown-number-display">
-                            <div class="countdown-number-top" id="hours">00</div>
-                        </div>
-                        <div class="countdown-progress">
-                            <div class="countdown-progress-bar" id="hoursProgress"></div>
-                        </div>
-                        <div class="countdown-label">Hours</div>
-                        <div class="countdown-glow"></div>
-                    </div>
+                    <div class="countdown-card"><div class="countdown-number-display"><div class="countdown-number-top" id="hours">00</div></div>
+                    <div class="countdown-progress"><div class="countdown-progress-bar" id="hoursProgress"></div></div>
+                    <div class="countdown-label">Hours</div><div class="countdown-glow"></div></div>
                 </div>
-
                 <div class="countdown-separator">:</div>
 
-                <!-- Minutes -->
                 <div class="countdown-unit">
-                    <div class="countdown-card">
-                        <div class="countdown-number-display">
-                            <div class="countdown-number-top" id="minutes">00</div>
-                        </div>
-                        <div class="countdown-progress">
-                            <div class="countdown-progress-bar" id="minutesProgress"></div>
-                        </div>
-                        <div class="countdown-label">Minutes</div>
-                        <div class="countdown-glow"></div>
-                    </div>
+                    <div class="countdown-card"><div class="countdown-number-display"><div class="countdown-number-top" id="minutes">00</div></div>
+                    <div class="countdown-progress"><div class="countdown-progress-bar" id="minutesProgress"></div></div>
+                    <div class="countdown-label">Minutes</div><div class="countdown-glow"></div></div>
                 </div>
-
                 <div class="countdown-separator">:</div>
 
-                <!-- Seconds -->
                 <div class="countdown-unit">
-                    <div class="countdown-card active">
-                        <div class="countdown-number-display">
-                            <div class="countdown-number-top" id="seconds">00</div>
-                        </div>
-                        <div class="countdown-progress">
-                            <div class="countdown-progress-bar" id="secondsProgress"></div>
-                        </div>
-                        <div class="countdown-label">Seconds</div>
-                        <div class="countdown-glow active"></div>
-                    </div>
+                    <div class="countdown-card active"><div class="countdown-number-display"><div class="countdown-number-top" id="seconds">00</div></div>
+                    <div class="countdown-progress"><div class="countdown-progress-bar" id="secondsProgress"></div></div>
+                    <div class="countdown-label">Seconds</div><div class="countdown-glow active"></div></div>
                 </div>
             </div>
 
-            <div class="countdown-complete" id="battleComplete" style="display: none;">
+            <div class="countdown-complete" id="battleComplete" style="display:none;">
                 <div class="complete-icon">⚔️</div>
                 <div class="complete-text">The Battle Has Ended!</div>
                 <div class="complete-subtext">Glory to the Champions</div>
-            </div>
-
-            <div class="countdown-effects">
-                <div class="countdown-pulse"></div>
-                <div class="countdown-rings">
-                    <div class="ring ring-1"></div>
-                    <div class="ring ring-2"></div>
-                    <div class="ring ring-3"></div>
-                </div>
             </div>
         </div>
 
@@ -681,10 +626,12 @@
     </div>
 
     <script>
-        // Calculate battle times dynamically
-        const now = new Date();
-        const battleStartTime = new Date(now.getTime() + (19 * 60 * 1000)).getTime(); // 19 minutes from now
-        const battleEndTime = new Date(battleStartTime + (24 * 60 * 60 * 1000)).getTime(); // 24 hours after start
+        // --- FIXED COUNTDOWN LOGIC FOR SRI LANKA TIME ---
+        const timeZone = "Asia/Colombo";
+
+        // Define fixed event times
+        const battleStart = new Date("2025-10-18T10:00:00+05:30").getTime();
+        const battleEnd = new Date("2025-10-19T10:00:00+05:30").getTime();
 
         function formatNumber(num) {
             return num.toString().padStart(2, '0');
@@ -692,7 +639,7 @@
 
         function updateCountdown() {
             const now = new Date().getTime();
-            
+
             const titleElement = document.getElementById('countdownTitle');
             const subtitleElement = document.getElementById('countdownSubtitle');
             const countdownDisplay = document.getElementById('countdownDisplay');
@@ -703,103 +650,68 @@
             let targetTime;
             let difference;
 
-            if (now < battleStartTime) {
-                // Before battle starts - countdown to battle start
-                targetTime = battleStartTime;
+            if (now < battleStart) {
+                // Before battle starts
+                targetTime = battleStart;
                 difference = targetTime - now;
                 titleElement.textContent = 'Battle Begins In';
                 subtitleElement.textContent = 'Prepare for Digital Combat';
-                
-                if (difference > 0) {
-                    const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-                    const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-                    const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-
-                    // Show/hide days unit based on whether there are days remaining
-                    if (days > 0) {
-                        daysUnit.style.display = 'flex';
-                        daysSeparator.style.display = 'block';
-                        document.getElementById('days').textContent = formatNumber(days);
-                        document.getElementById('daysProgress').style.width = `${(days % 10) * 10}%`;
-                    } else {
-                        daysUnit.style.display = 'none';
-                        daysSeparator.style.display = 'none';
-                    }
-
-                    document.getElementById('hours').textContent = formatNumber(hours);
-                    document.getElementById('minutes').textContent = formatNumber(minutes);
-                    document.getElementById('seconds').textContent = formatNumber(seconds);
-
-                    document.getElementById('hoursProgress').style.width = `${(hours / 24) * 100}%`;
-                    document.getElementById('minutesProgress').style.width = `${(minutes / 60) * 100}%`;
-                    document.getElementById('secondsProgress').style.width = `${(seconds / 60) * 100}%`;
-
-                    countdownDisplay.style.display = 'flex';
-                    battleComplete.style.display = 'none';
-                }
-            } else if (now >= battleStartTime && now < battleEndTime) {
-                // Battle in progress - countdown to battle end
-                targetTime = battleEndTime;
+            } else if (now >= battleStart && now < battleEnd) {
+                // During battle
+                targetTime = battleEnd;
                 difference = targetTime - now;
                 titleElement.textContent = 'Battle Ends In';
                 subtitleElement.textContent = 'Fight Until The Last Second';
-                
-                if (difference > 0) {
-                    const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-                    const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-                    const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-
-                    // Show/hide days unit based on whether there are days remaining
-                    if (days > 0) {
-                        daysUnit.style.display = 'flex';
-                        daysSeparator.style.display = 'block';
-                        document.getElementById('days').textContent = formatNumber(days);
-                        document.getElementById('daysProgress').style.width = `${(days % 10) * 10}%`;
-                    } else {
-                        daysUnit.style.display = 'none';
-                        daysSeparator.style.display = 'none';
-                    }
-
-                    document.getElementById('hours').textContent = formatNumber(hours);
-                    document.getElementById('minutes').textContent = formatNumber(minutes);
-                    document.getElementById('seconds').textContent = formatNumber(seconds);
-
-                    document.getElementById('hoursProgress').style.width = `${(hours / 24) * 100}%`;
-                    document.getElementById('minutesProgress').style.width = `${(minutes / 60) * 100}%`;
-                    document.getElementById('secondsProgress').style.width = `${(seconds / 60) * 100}%`;
-
-                    countdownDisplay.style.display = 'flex';
-                    battleComplete.style.display = 'none';
-                }
             } else {
-                // Battle ended
+                // After battle
                 titleElement.textContent = 'Arena Closed';
                 subtitleElement.textContent = 'The Battle Has Concluded';
                 countdownDisplay.style.display = 'none';
                 battleComplete.style.display = 'block';
+                updateCurrentTime();
+                return;
             }
 
-            // Update full date/time display
-            const now2 = new Date();
-            const options = { 
-                weekday: 'long', 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                timeZone: 'Asia/Colombo'
-            };
-            document.getElementById('currentDateTime').textContent = now2.toLocaleString('en-US', options);
+            // Calculate time left
+            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+            if (days > 0) {
+                daysUnit.style.display = 'flex';
+                daysSeparator.style.display = 'block';
+                document.getElementById('days').textContent = formatNumber(days);
+                document.getElementById('daysProgress').style.width = `${(days % 10) * 10}%`;
+            } else {
+                daysUnit.style.display = 'none';
+                daysSeparator.style.display = 'none';
+            }
+
+            document.getElementById('hours').textContent = formatNumber(hours);
+            document.getElementById('minutes').textContent = formatNumber(minutes);
+            document.getElementById('seconds').textContent = formatNumber(seconds);
+
+            document.getElementById('hoursProgress').style.width = `${(hours / 24) * 100}%`;
+            document.getElementById('minutesProgress').style.width = `${(minutes / 60) * 100}%`;
+            document.getElementById('secondsProgress').style.width = `${(seconds / 60) * 100}%`;
+
+            countdownDisplay.style.display = 'flex';
+            battleComplete.style.display = 'none';
+
+            updateCurrentTime();
         }
 
-        // Update immediately
-        updateCountdown();
+        function updateCurrentTime() {
+            const now = new Date();
+            const options = {
+                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+                hour: '2-digit', minute: '2-digit', second: '2-digit', timeZone: 'Asia/Colombo'
+            };
+            document.getElementById('currentDateTime').textContent = now.toLocaleString('en-US', options);
+        }
 
-        // Update every second
+        updateCountdown();
         setInterval(updateCountdown, 1000);
     </script>
 </body>
