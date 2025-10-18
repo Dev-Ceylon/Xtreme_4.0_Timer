@@ -327,9 +327,45 @@
             animation: glowPulse 2s ease-in-out infinite;
         }
 
-        @keyframes glowPulse {
-            0%, 100% { opacity: 0.3; filter: blur(8px); }
-            50% { opacity: 0.6; filter: blur(12px); }
+        .countdown-complete {
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(226, 125, 56, 0.1));
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 20px;
+            animation: completePulse 2s ease-in-out infinite;
+        }
+
+        .complete-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: bounce 1s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .complete-text {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: #22c55e;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+        }
+
+        .complete-subtext {
+            font-size: 1rem;
+            color: #94a3b8;
+            font-weight: 600;
+        }
+
+        @keyframes completePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
         }
 
         .countdown-effects {
@@ -558,7 +594,23 @@
                 <div class="countdown-subtitle" id="countdownSubtitle">Prepare for Digital Combat</div>
             </div>
 
-            <div class="enhanced-countdown-grid">
+            <div class="enhanced-countdown-grid" id="countdownDisplay">
+                <!-- Days -->
+                <div class="countdown-unit" id="daysUnit">
+                    <div class="countdown-card">
+                        <div class="countdown-number-display">
+                            <div class="countdown-number-top" id="days">00</div>
+                        </div>
+                        <div class="countdown-progress">
+                            <div class="countdown-progress-bar" id="daysProgress"></div>
+                        </div>
+                        <div class="countdown-label">Days</div>
+                        <div class="countdown-glow"></div>
+                    </div>
+                </div>
+
+                <div class="countdown-separator" id="daysSeparator">:</div>
+
                 <!-- Hours -->
                 <div class="countdown-unit">
                     <div class="countdown-card">
@@ -606,6 +658,12 @@
                 </div>
             </div>
 
+            <div class="countdown-complete" id="battleComplete" style="display: none;">
+                <div class="complete-icon">⚔️</div>
+                <div class="complete-text">The Battle Has Ended!</div>
+                <div class="complete-subtext">Glory to the Champions</div>
+            </div>
+
             <div class="countdown-effects">
                 <div class="countdown-pulse"></div>
                 <div class="countdown-rings">
@@ -623,55 +681,108 @@
     </div>
 
     <script>
-        // Battle times in Sri Lanka timezone (UTC+5:30)
-        const battleStartTime = new Date('2025-10-18T10:00:00+05:30').getTime();
-        const battleEndTime = new Date('2025-10-19T10:00:00+05:30').getTime();
+        // Calculate battle times dynamically
+        const now = new Date();
+        const battleStartTime = new Date(now.getTime() + (19 * 60 * 1000)).getTime(); // 19 minutes from now
+        const battleEndTime = new Date(battleStartTime + (24 * 60 * 60 * 1000)).getTime(); // 24 hours after start
 
         function formatNumber(num) {
             return num.toString().padStart(2, '0');
         }
 
-        function updateClock() {
-            const now = new Date();
-            const currentTime = now.getTime();
+        function updateCountdown() {
+            const now = new Date().getTime();
             
-            const hours = now.getHours();
-            const minutes = now.getMinutes();
-            const seconds = now.getSeconds();
-            const milliseconds = now.getMilliseconds();
-
-            // Determine battle phase and update title
             const titleElement = document.getElementById('countdownTitle');
             const subtitleElement = document.getElementById('countdownSubtitle');
-            
-            if (currentTime < battleStartTime) {
-                // Before battle starts
+            const countdownDisplay = document.getElementById('countdownDisplay');
+            const battleComplete = document.getElementById('battleComplete');
+            const daysUnit = document.getElementById('daysUnit');
+            const daysSeparator = document.getElementById('daysSeparator');
+
+            let targetTime;
+            let difference;
+
+            if (now < battleStartTime) {
+                // Before battle starts - countdown to battle start
+                targetTime = battleStartTime;
+                difference = targetTime - now;
                 titleElement.textContent = 'Battle Begins In';
                 subtitleElement.textContent = 'Prepare for Digital Combat';
-            } else if (currentTime >= battleStartTime && currentTime < battleEndTime) {
-                // Battle in progress
+                
+                if (difference > 0) {
+                    const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+                    // Show/hide days unit based on whether there are days remaining
+                    if (days > 0) {
+                        daysUnit.style.display = 'flex';
+                        daysSeparator.style.display = 'block';
+                        document.getElementById('days').textContent = formatNumber(days);
+                        document.getElementById('daysProgress').style.width = `${(days % 10) * 10}%`;
+                    } else {
+                        daysUnit.style.display = 'none';
+                        daysSeparator.style.display = 'none';
+                    }
+
+                    document.getElementById('hours').textContent = formatNumber(hours);
+                    document.getElementById('minutes').textContent = formatNumber(minutes);
+                    document.getElementById('seconds').textContent = formatNumber(seconds);
+
+                    document.getElementById('hoursProgress').style.width = `${(hours / 24) * 100}%`;
+                    document.getElementById('minutesProgress').style.width = `${(minutes / 60) * 100}%`;
+                    document.getElementById('secondsProgress').style.width = `${(seconds / 60) * 100}%`;
+
+                    countdownDisplay.style.display = 'flex';
+                    battleComplete.style.display = 'none';
+                }
+            } else if (now >= battleStartTime && now < battleEndTime) {
+                // Battle in progress - countdown to battle end
+                targetTime = battleEndTime;
+                difference = targetTime - now;
                 titleElement.textContent = 'Battle Ends In';
                 subtitleElement.textContent = 'Fight Until The Last Second';
+                
+                if (difference > 0) {
+                    const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+                    // Show/hide days unit based on whether there are days remaining
+                    if (days > 0) {
+                        daysUnit.style.display = 'flex';
+                        daysSeparator.style.display = 'block';
+                        document.getElementById('days').textContent = formatNumber(days);
+                        document.getElementById('daysProgress').style.width = `${(days % 10) * 10}%`;
+                    } else {
+                        daysUnit.style.display = 'none';
+                        daysSeparator.style.display = 'none';
+                    }
+
+                    document.getElementById('hours').textContent = formatNumber(hours);
+                    document.getElementById('minutes').textContent = formatNumber(minutes);
+                    document.getElementById('seconds').textContent = formatNumber(seconds);
+
+                    document.getElementById('hoursProgress').style.width = `${(hours / 24) * 100}%`;
+                    document.getElementById('minutesProgress').style.width = `${(minutes / 60) * 100}%`;
+                    document.getElementById('secondsProgress').style.width = `${(seconds / 60) * 100}%`;
+
+                    countdownDisplay.style.display = 'flex';
+                    battleComplete.style.display = 'none';
+                }
             } else {
                 // Battle ended
-                titleElement.textContent = 'Battle Has Ended';
-                subtitleElement.textContent = 'Glory to the Champions';
+                titleElement.textContent = 'Arena Closed';
+                subtitleElement.textContent = 'The Battle Has Concluded';
+                countdownDisplay.style.display = 'none';
+                battleComplete.style.display = 'block';
             }
 
-            // Update display
-            document.getElementById('hours').textContent = formatNumber(hours);
-            document.getElementById('minutes').textContent = formatNumber(minutes);
-            document.getElementById('seconds').textContent = formatNumber(seconds);
-
-            // Update progress bars
-            document.getElementById('hoursProgress').style.width = `${(hours / 24) * 100}%`;
-            document.getElementById('minutesProgress').style.width = `${(minutes / 60) * 100}%`;
-            
-            // Smooth seconds progress including milliseconds
-            const secondsProgress = ((seconds + (milliseconds / 1000)) / 60) * 100;
-            document.getElementById('secondsProgress').style.width = `${secondsProgress}%`;
-
             // Update full date/time display
+            const now2 = new Date();
             const options = { 
                 weekday: 'long', 
                 year: 'numeric', 
@@ -682,14 +793,14 @@
                 second: '2-digit',
                 timeZone: 'Asia/Colombo'
             };
-            document.getElementById('currentDateTime').textContent = now.toLocaleString('en-US', options);
+            document.getElementById('currentDateTime').textContent = now2.toLocaleString('en-US', options);
         }
 
         // Update immediately
-        updateClock();
+        updateCountdown();
 
-        // Update every 50ms for smooth animation
-        setInterval(updateClock, 50);
+        // Update every second
+        setInterval(updateCountdown, 1000);
     </script>
 </body>
 </html>
